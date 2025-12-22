@@ -1,11 +1,16 @@
-import { HomeIcon, BookIcon, CodeIcon, CircleUserRoundIcon } from "lucide-react"
-import type { LucideIcon } from "lucide-react"
+import type { LucideIcon } from "lucide-react";
+import {
+  BookIcon,
+  CircleUserRoundIcon,
+  CodeIcon,
+  HomeIcon,
+} from "lucide-react";
 
 export type NavigationItem = {
-  title: string
-  url: string
-  icon: LucideIcon
-}
+  title: string;
+  url: string;
+  icon: LucideIcon;
+};
 
 export const navigation: NavigationItem[] = [
   {
@@ -28,4 +33,4 @@ export const navigation: NavigationItem[] = [
     url: "#contact",
     icon: CircleUserRoundIcon,
   },
-]
+];

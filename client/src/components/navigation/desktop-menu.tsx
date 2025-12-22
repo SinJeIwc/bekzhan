@@ -1,78 +1,78 @@
 "use client";
 
 import { navigation } from "@constants/navigation";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
 
 export function DesktopMenu() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [clickedIndex, setClickedIndex] = useState<number | null>(null);
-  const clickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+	const [clickedIndex, setClickedIndex] = useState<number | null>(null);
+	const clickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleClick = (index: number) => {
-    setClickedIndex(index);
-    if (clickTimeoutRef.current) {
-      clearTimeout(clickTimeoutRef.current);
-    }
-    clickTimeoutRef.current = setTimeout(() => setClickedIndex(null), 300);
-  };
+	const handleClick = (index: number) => {
+		setClickedIndex(index);
+		if (clickTimeoutRef.current) {
+			clearTimeout(clickTimeoutRef.current);
+		}
+		clickTimeoutRef.current = setTimeout(() => setClickedIndex(null), 300);
+	};
 
-  useEffect(() => {
-    return () => {
-      if (clickTimeoutRef.current) {
-        clearTimeout(clickTimeoutRef.current);
-      }
-    };
-  }, []);
+	useEffect(() => {
+		return () => {
+			if (clickTimeoutRef.current) {
+				clearTimeout(clickTimeoutRef.current);
+			}
+		};
+	}, []);
 
-  return (
-    <nav
-      aria-label="Primary"
-      className="relative items-center hidden p-2 border rounded-full md:flex border-chart-2/80"
-      onMouseLeave={() => setHoveredIndex(null)}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-          setHoveredIndex(null);
-        }
-      }}
-    >
-      {navigation.map((item, index) => (
-        <Link
-          key={item.url}
-          href={item.url}
-          className="text-base relative z-10 px-3 py-1.5 transition-colors focus-visible:outline-none cursor-pointer"
-          onMouseEnter={() => setHoveredIndex(index)}
-          onFocus={() => setHoveredIndex(index)}
-          onClick={() => handleClick(index)}
-        >
-          {clickedIndex === index && (
-            <motion.span
-              aria-hidden="true"
-              className="absolute inset-0 rounded-full bg-primary/20"
-              initial={{ scale: 0.8, opacity: 1 }}
-              animate={{ scale: 1.2, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-            />
-          )}
-          
-          {hoveredIndex === index && (
-            <motion.span
-              aria-hidden="true"
-              layoutId="hover"
-              className="absolute inset-0 rounded-full bg-chart-2/20"
-              transition={{ 
-                type: "spring", 
-                stiffness: 200, 
-                damping: 30,
-                opacity: { duration: 0.15 }
-              }}
-            />
-          )}
+	return (
+		<nav
+			aria-label="Primary"
+			className="relative items-center hidden p-2 border rounded-full md:flex border-chart-2/80"
+			onMouseLeave={() => setHoveredIndex(null)}
+			onBlur={(event) => {
+				if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+					setHoveredIndex(null);
+				}
+			}}
+		>
+			{navigation.map((item, index) => (
+				<Link
+					key={item.url}
+					href={item.url}
+					className="text-base relative z-10 px-3 py-1.5 transition-colors focus-visible:outline-none cursor-pointer"
+					onMouseEnter={() => setHoveredIndex(index)}
+					onFocus={() => setHoveredIndex(index)}
+					onClick={() => handleClick(index)}
+				>
+					{clickedIndex === index && (
+						<motion.span
+							aria-hidden="true"
+							className="absolute inset-0 rounded-full bg-primary/20"
+							initial={{ scale: 0.8, opacity: 1 }}
+							animate={{ scale: 1.2, opacity: 0 }}
+							transition={{ duration: 0.3, ease: "easeOut" }}
+						/>
+					)}
 
-          <span className="relative z-10">{item.title}</span>
-        </Link>
-      ))}
-    </nav>
-  );
+					{hoveredIndex === index && (
+						<motion.span
+							aria-hidden="true"
+							layoutId="hover"
+							className="absolute inset-0 rounded-full bg-chart-2/20"
+							transition={{
+								type: "spring",
+								stiffness: 200,
+								damping: 30,
+								opacity: { duration: 0.15 },
+							}}
+						/>
+					)}
+
+					<span className="relative z-10">{item.title}</span>
+				</Link>
+			))}
+		</nav>
+	);
 }
