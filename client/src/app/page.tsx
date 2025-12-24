@@ -1,18 +1,15 @@
+import { About } from "@components/about";
+import { Contact } from "@components/contact";
+import { Hero } from "@components/hero";
+import { Skills } from "@components/skills";
+
 export default function Home() {
   return (
-    <main className="container flex flex-col items-center justify-between min-h-screen mx-auto">
-      <div id="home" className="h-screen">
-        home
-      </div>
-      <div id="about" className="h-screen">
-        about
-      </div>
-      <div id="skills" className="h-screen">
-        skills
-      </div>
-      <div id="contact" className="h-screen">
-        contact
-      </div>
+    <main className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth w-[calc(100%-2rem)] mx-auto no-scrollbar">
+      <Hero />
+      <About />
+      <Skills />
+      <Contact />
     </main>
   );
 }

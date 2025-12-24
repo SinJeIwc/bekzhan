@@ -55,11 +55,9 @@ export function MobileMenu() {
           ))}
         </nav>
         <SheetFooter>
-          <SheetClose asChild>
-            <Button variant="secondary" className="w-full">
-              Close
-            </Button>
-          </SheetClose>
+          <p className="text-xs text-muted-foreground">
+            Something might appear here someday, probably...
+          </p>
         </SheetFooter>
       </SheetContent>
     </Sheet>
