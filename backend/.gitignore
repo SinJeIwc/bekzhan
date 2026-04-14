@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.python-version
+
+# Virtual environment
+.venv/
+
+# Environment variables
+.env
+
+# Uploads (user content, not code)
+uploads/
+
+# uv
+uv.lock
+
+# IDE
+.idea/
+.vscode/
+.zed/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
