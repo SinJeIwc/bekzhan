@@ -1,15 +1,46 @@
-.venv/
+# Python
 __pycache__/
-*.pyc
-.pytest_cache/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+
+# Packaging artifacts
+*.egg-info/
+dist/
+build/
+
+# Caches
 .ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.ty_cache/
+.coverage
+htmlcov/
+
+# Env files (use runtime env vars in prod, never bake secrets into image)
 .env
 .env.*
+
+# User uploads (use mounted volume in prod, not baked content)
 uploads/
-alembic/versions/__pycache__/
+
+# Docker / git
 .git
 .gitignore
-.zed/
+.dockerignore
+docker-compose*.yml
+Dockerfile*
+
+# IDE
 .idea/
 .vscode/
+.zed/
+*.swp
+
+# Docs & OS
 README.md
+.DS_Store
+Thumbs.db

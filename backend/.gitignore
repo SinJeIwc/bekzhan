@@ -2,19 +2,32 @@
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyd
 .python-version
+
+# Packaging artifacts
+*.egg-info/
+dist/
+build/
+
+# Caches
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.ty_cache/
+.coverage
+htmlcov/
 
 # Virtual environment
 .venv/
 
 # Environment variables
 .env
+.env.*
+!.env.example
 
 # Uploads (user content, not code)
 uploads/
-
-# uv
-uv.lock
 
 # IDE
 .idea/
