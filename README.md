@@ -8,4 +8,4 @@ Hi, I'm **Bekzhan** — software engineer.
 
 This is my personal portfolio **[website](https://arstanaliev.vercel.app/)** where I showcase my projects, skills, and experience.
 
-![Portfolio Screenshot](./client/src/app/opengraph-image.png)
+![Portfolio Screenshot](./frontend/src/app/opengraph-image.png)
