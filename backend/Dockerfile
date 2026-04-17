@@ -7,6 +7,9 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 WORKDIR /app
 
 COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project
+
+COPY . .
 RUN uv sync --frozen --no-dev
 
 # Stage 2: production
@@ -14,7 +17,7 @@ RUN uv sync --frozen --no-dev
 FROM python:3.13-slim AS production
 
 RUN addgroup --gid 1001 --system app && \
-    adduser --system --uid 1001 --igroup app app
+    adduser --system --uid 1001 --ingroup app app
 
 WORKDIR /app
 
