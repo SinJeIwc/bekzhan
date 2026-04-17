@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routers import dramas
+from app.routers import dramas, owner
 
 app = FastAPI(
     title="Bekzhan's API",
@@ -9,6 +9,7 @@ app = FastAPI(
 )
 
 app.include_router(dramas.router, prefix="/api")
+app.include_router(owner.router, prefix="/api")
 
 
 @app.get("/health", tags=["Health"])

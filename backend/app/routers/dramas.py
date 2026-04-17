@@ -1,21 +1,28 @@
 import uuid
 from collections.abc import Sequence
+from webbrowser import get
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import select
 
+from app.dependencies.owner import get_current_owner
 from app.dependencies.session import SessionDep
 from app.models.drama import Drama, DramaCreate, DramaPublic
 
-router = APIRouter(prefix="/dramas", tags=["dramas"])
+public_router = APIRouter(prefix="/dramas", tags=["dramas"])
+protected_roter = APIRouter(
+    prefix="/dramas",
+    tags=["dramas"],
+    dependencies=[Depends(get_current_owner)],
+)
 
 
-@router.get("/", response_model=list[DramaPublic])
+@public_router.get("/", response_model=list[DramaPublic])
 def list_dramas(session: SessionDep) -> Sequence[Drama]:
     return session.exec(select(Drama)).all()
 
 
-@router.get("/{drama_id}", response_model=DramaPublic)
+@public_router.get("/{drama_id}", response_model=DramaPublic)
 def get_drama(drama_id: uuid.UUID, session: SessionDep) -> Drama:
     drama = session.get(Drama, drama_id)
     if drama is None:
@@ -26,7 +33,9 @@ def get_drama(drama_id: uuid.UUID, session: SessionDep) -> Drama:
     return drama
 
 
-@router.post("/", response_model=DramaPublic, status_code=status.HTTP_201_CREATED)
+@protected_roter.post(
+    "/", response_model=DramaPublic, status_code=status.HTTP_201_CREATED
+)
 def create_drama(data: DramaCreate, session: SessionDep) -> Drama:
     drama = Drama.model_validate(data)
     session.add(drama)
@@ -35,7 +44,7 @@ def create_drama(data: DramaCreate, session: SessionDep) -> Drama:
     return drama
 
 
-@router.put("/{drama_id}", response_model=DramaPublic)
+@protected_roter.put("/{drama_id}", response_model=DramaPublic)
 def update_drama(
     drama_id: uuid.UUID,
     data: DramaCreate,
@@ -55,13 +64,13 @@ def update_drama(
     return drama
 
 
-@router.delete("/{drama_id}", status_code=status.HTTP_204_NO_CONTENT)
+@protected_roter.delete("/{drama_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_drama(drama_id: uuid.UUID, session: SessionDep) -> None:
     drama = session.get(Drama, drama_id)
     if drama is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Drama nor found",
+            detail="Drama not found",
         )
     session.delete(drama)
     session.commit()

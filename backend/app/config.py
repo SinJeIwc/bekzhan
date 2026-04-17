@@ -12,8 +12,8 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expiration_hours: int = 24
     upload_dir: str = "uploads"
-    admin_username: str = "admin"
-    admin_password: str = ""
+    owner_username: str = "admin"
+    owner_password_hash: str = ""
 
 
 settings = Settings()
