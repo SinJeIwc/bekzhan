@@ -7,6 +7,7 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
+    cors_origins: list[str] = ["http://localhost:3000"]
     database_url: str = "postgresql://postgres:dev@localhost:5432/bekzhan"
     jwt_secret: str = "change-me-in-production"
     jwt_algorithm: str = "HS256"
