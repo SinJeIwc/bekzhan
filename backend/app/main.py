@@ -23,5 +23,5 @@ app.mount("/uploads", StaticFiles(directory=uploads_path), name="uploads")
 
 
 @app.get("/health", tags=["Health"])
-def health():
+def health() -> dict[str, str]:
     return {"status": "ok"}

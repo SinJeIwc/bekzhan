@@ -7,7 +7,7 @@
 
 ### Context
 
-Building a lightweight backend for a personal profile site. Single admin user, CRUD for dramas/media, image uploads. Need to choose ORM, package manager, and async strategy.
+Building a lightweight backend for a personal profile site. Single owner user, CRUD for dramas/media, image uploads. Need to choose ORM, package manager, and async strategy.
 
 ### Decisions
 
@@ -17,7 +17,7 @@ Building a lightweight backend for a personal profile site. Single admin user, C
 | Package manager | **uv + pyproject.toml** | Fast, modern. Replaces pip + virtualenv + requirements.txt. Single `pyproject.toml` for deps and config. |
 | Async strategy | **Sync `def` endpoints** | SQLModel uses blocking SQLAlchemy under the hood. Use regular `def` — FastAPI runs them in a threadpool automatically. Never put blocking code in `async def`. |
 | Linter/formatter | **Ruff** | Replaces Black + isort + flake8. Enable FastAPI rules. |
-| Type checker | **ty** (if available) | Recommended by FastAPI skill. |
+| Type checker | **basedpyright** | Zed's default Python language server. Strict mode. |
 | HTTP client | **HTTPX** (if needed) | Recommended over Requests. Supports sync and async. |
 
 ### Consequences
@@ -55,18 +55,18 @@ Frontend and backend run as separate services:
 
 **Approach:** Minimal single-user auth. No registration flow.
 
-- On first startup, the app generates a random admin password via `secrets.token_urlsafe(16)` and stores it in `.env`. If `.env` already has a password, it reuses that.
-- Login via `POST /api/auth/login` with hardcoded username + generated password
+- Owner password is hashed with Argon2 (via `pwdlib`) and stored in `.env` as `OWNER_PASSWORD_HASH`
+- Login via `POST /api/owner/login` with username + password (OAuth2 form)
 - Returns a JWT token (short-lived, 24h TTL)
-- All write endpoints require `Authorization: Bearer <token>` header
-- Public read endpoints are open (no token needed)
+- Write endpoints (create, update, delete) require `Authorization: Bearer <token>` header
+- Read endpoints (list, get) are public — no token needed
 - Auth dependency uses `Annotated` style with reusable type alias:
 
 ```python
 from typing import Annotated
 from fastapi import Depends
 
-CurrentAdminDep = Annotated[dict, Depends(get_current_admin)]
+CurrentOwnerDep = Annotated[str, Depends(get_current_owner)]
 ```
 
 ## File Storage
@@ -75,31 +75,30 @@ CurrentAdminDep = Annotated[dict, Depends(get_current_admin)]
 
 - Uploaded images stored in `/uploads/posters/` on the server
 - FastAPI serves them as static files via `StaticFiles` mount
-- On upload: validate file type (JPEG/PNG/WebP), resize to max 800px width via Pillow, generate unique filename
+- On upload: validate file type (JPEG/PNG/WebP) and verify image integrity, resize to max 800px width via Pillow, generate UUID-based filename
 - Database stores relative path (`/uploads/posters/{filename}`)
 
 ## Database Schema (SQLModel)
 
 ```python
-# Single model serves as both DB table and Pydantic schema
-
 class DramaBase(SQLModel):
     title: str
     original_title: str | None = None
     poster_path: str | None = None
     description: str
-    review: str
-    rating: float = Field(ge=1, le=10)
-    status: DramaStatus  # enum: watching, completed, dropped, plan_to_watch
-    genres: list[str] = Field(default_factory=list)
+    review: str | None = None
+    rating: float = Field(ge=0, le=10)
+    status: DramaStatus       # enum: watching, completed, dropped, planned
+    genres: list[DramaGenre] = Field(default_factory=list, sa_column=Column(JSON))
     year: int
-    episodes: int | None = None
-    country: str | None = None
+    episodes_aired: int | None = None
+    episodes_total: int | None = None
+    country: DramaCountry     # enum: Korea, China, Japan, Taiwan
 
 class Drama(DramaBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime      # DateTime(timezone=True), auto-set
+    updated_at: datetime      # DateTime(timezone=True), auto-set, onupdate
 
 class DramaCreate(DramaBase):
     pass  # input schema — no id, no timestamps
@@ -108,7 +107,7 @@ class DramaPublic(DramaBase):
     id: uuid.UUID
     created_at: datetime
     updated_at: datetime
-    # response schema — includes id and timestamps but no secrets
+    # response schema — includes id and timestamps
 ```
 
 ## Project Structure (backend)
@@ -116,26 +115,28 @@ class DramaPublic(DramaBase):
 ```
 backend/
 ├── app/
-│   ├── main.py              — FastAPI app, CORS, static mount, lifespan
-│   ├── config.py            — settings via pydantic-settings (DB URL, JWT secret, upload path)
-│   ├── database.py          — SQLModel engine & Session dependency (yield)
+│   ├── main.py              — FastAPI app, static mount, router wiring
+│   ├── config.py            — settings via pydantic-settings (from .env)
+│   ├── database.py          — SQLModel engine & session dependency (yield)
 │   ├── models/
-│   │   ├── user.py          — User table + schemas
-│   │   └── drama.py         — Drama table + DramaCreate, DramaPublic schemas
+│   │   └── drama.py         — Drama table + enums + DramaCreate, DramaPublic
 │   ├── routers/
-│   │   ├── auth.py          — APIRouter(prefix="/api/auth", tags=["auth"])
-│   │   ├── dramas.py        — APIRouter(prefix="/api/dramas", tags=["dramas"])
-│   │   └── upload.py        — APIRouter(prefix="/api/upload", tags=["upload"])
+│   │   ├── dramas.py        — public_router + protected_router (CRUD)
+│   │   ├── owner.py         — APIRouter(prefix="/owner") — login endpoint
+│   │   └── upload.py        — APIRouter(prefix="/upload") — poster upload
 │   ├── dependencies/
-│   │   └── auth.py          — JWT verify dependency, CurrentAdminDep type alias
+│   │   ├── session.py       — SessionDep type alias
+│   │   └── owner.py         — JWT verify, CurrentOwnerDep type alias
 │   └── utils/
-│       ├── password.py      — generate startup password, Argon2 hashing
-│       └── image.py         — resize & save poster via Pillow
-├── alembic/                 — migrations
+│       ├── password.py      — Argon2 hashing via pwdlib
+│       ├── token.py         — JWT create & decode via PyJWT
+│       └── image.py         — validate, resize & save poster via Pillow
+├── alembic/                 — migrations (committed to git)
 ├── uploads/                 — poster images (gitignored)
-├── pyproject.toml           — deps, FastAPI entrypoint, Ruff config, Alembic config
-├── uv.lock                  — lockfile (auto-generated by uv)
-└── .env                     — secrets (DB URL, JWT secret, admin password)
+├── pyproject.toml           — deps, FastAPI entrypoint, Ruff config
+├── docker-compose.yml       — PostgreSQL 17-alpine
+├── uv.lock                  — lockfile (committed to git)
+└── .env                     — secrets (DB URL, JWT secret, owner password hash)
 ```
 
 ### Key differences from SQLAlchemy approach
@@ -148,25 +149,18 @@ backend/
 ## FastAPI Best Practices (from official skill)
 
 1. **Annotated everywhere** — all params, dependencies, Query/Path use `Annotated`
-2. **Type aliases for deps** — `DBSessionDep = Annotated[Session, Depends(get_session)]`
+2. **Type aliases for deps** — `SessionDep = Annotated[Session, Depends(get_session)]`
 3. **Return types on all endpoints** — enables validation, filtering, serialization
-4. **One HTTP method per function** — no `api_route()` with multiple methods
-5. **No Ellipsis (`...`)** — don't use `...` as default value in params or Pydantic fields
-6. **No ORJSONResponse/UJSONResponse** — deprecated, Pydantic handles serialization in Rust
-7. **Router-level config** — `APIRouter(prefix="/api/dramas", tags=["dramas"])`, not in `include_router()`
-8. **DB session via yield dependency** — cleanup after request:
-
-```python
-def get_session():
-    with Session(engine) as session:
-        yield session
-
-SessionDep = Annotated[Session, Depends(get_session)]
-```
+4. **response_model + accurate return type** — `response_model=DramaPublic` for serialization, `-> Drama` for type checker
+5. **One HTTP method per function** — no `api_route()` with multiple methods
+6. **No Ellipsis (`...`)** — don't use `...` as default value in params or Pydantic fields
+7. **No ORJSONResponse/UJSONResponse** — deprecated, Pydantic handles serialization in Rust
+8. **Router-level config** — `APIRouter(prefix="/dramas", tags=["dramas"])`, not in `include_router()`
+9. **DB session via yield dependency** — cleanup after request
 
 ## Notes
 
-- PostgreSQL runs locally via Docker: `docker run -d -p 5432:5432 -e POSTGRES_DB=bekzhan -e POSTGRES_PASSWORD=dev postgres:16`
+- PostgreSQL runs locally via Docker. See [docker.md](docker.md) for commands and troubleshooting.
 - Pillow resizes posters on upload to keep file sizes small. Original aspect ratio preserved, max width 800px.
 - FastAPI CLI reads entrypoint from `pyproject.toml`: `[tool.fastapi] entrypoint = "app.main:app"`
-- Dev server: `fastapi dev`, production: `fastapi run`
+- Dev server: `uv run fastapi dev`, production: `uv run fastapi run`

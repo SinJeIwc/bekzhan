@@ -18,10 +18,9 @@ def upload_poster(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Unsupported file type: {file.content_type}",
         )
-    file_bytes = file.file.read()
     filename = file.filename or "unknown.jpg"
     try:
-        path = save_poster(file_bytes, filename)
+        path = save_poster(file.file.read(), filename)
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

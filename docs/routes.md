@@ -4,25 +4,18 @@
 
 ### `/login`
 
-Admin login page. Single input form (password only, username is always "admin").
-On success — stores JWT in memory (or httpOnly cookie) and redirects to `/admin`.
+Owner login page. Single input form (password only, username is always "admin").
+On success — stores JWT in memory and redirects to `/admin`.
 Not linked from the main site navigation — accessed directly by URL.
 
 ### `/dramas`
 
 Public page. Displays a grid/list of all watched dramas with poster, title, rating, and status badge.
-Supports filtering by status (watching, completed, dropped, plan to watch) and sorting (by rating, date added).
-Each card links to `/dramas/[id]`.
+Client-side filtering by status and sorting by rating/date. Each card links to `/dramas/[id]`.
 
 ### `/dramas/[id]`
 
 Public page. Full drama detail view: large poster, title, original title, year, country, episodes count, genres, description, personal review, and rating.
-
-### `/media`
-
-Universal media listing page. Acts as a hub for different media types.
-Initially only dramas are available, but the page is designed to support future categories (movies, anime, books, music, etc.) via tabs or a sidebar filter.
-Fetches from a generic endpoint structure — `/api/media?type=drama`.
 
 ### `/admin`
 
@@ -39,16 +32,13 @@ Redirects to `/login` if no valid token.
 
 ## Backend API Endpoints (FastAPI)
 
-### Auth
+### Owner Auth
 
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| `POST` | `/api/auth/login` | — | Login with username + password. Returns `{ access_token, token_type }` |
+| `POST` | `/api/owner/login` | — | Login with username + password (OAuth2 form). Returns `{ access_token, token_type }` |
 
-**Request body:**
-```json
-{ "username": "admin", "password": "generated-password" }
-```
+**Request:** `application/x-www-form-urlencoded` with `username` and `password` fields.
 
 **Response:**
 ```json
@@ -59,50 +49,45 @@ Redirects to `/login` if no valid token.
 
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| `GET` | `/api/dramas` | — | List all dramas. Query params: `?status=completed&genre=romance&sort=rating` |
-| `GET` | `/api/dramas/:id` | — | Get single drama by ID |
-| `POST` | `/api/dramas` | JWT | Create new drama |
-| `PUT` | `/api/dramas/:id` | JWT | Update drama |
-| `DELETE` | `/api/dramas/:id` | JWT | Delete drama (also deletes poster file if exists) |
+| `GET` | `/api/dramas` | — | List all dramas |
+| `GET` | `/api/dramas/:id` | — | Get single drama by UUID |
+| `POST` | `/api/dramas` | Bearer | Create new drama |
+| `PUT` | `/api/dramas/:id` | Bearer | Update drama |
+| `DELETE` | `/api/dramas/:id` | Bearer | Delete drama |
 
-**Drama object:**
+**Drama object (DramaPublic):**
 ```json
 {
-  "id": "uuid",
+  "id": "a3f1b2c4-5678-...",
   "title": "Goblin",
   "original_title": "쓸쓸하고 찬란하神-도깨비",
-  "poster_url": "/uploads/posters/abc123.webp",
+  "poster_path": "/uploads/posters/abc123.webp",
   "description": "A goblin searching for his bride...",
   "review": "One of the best K-dramas ever made...",
   "rating": 9.5,
   "status": "completed",
-  "genres": ["romance", "fantasy", "drama"],
+  "genres": ["Romance", "Fantasy"],
   "year": 2016,
-  "episodes": 16,
+  "episodes_aired": 16,
+  "episodes_total": 16,
   "country": "Korea",
   "created_at": "2026-04-11T12:00:00Z",
   "updated_at": "2026-04-11T12:00:00Z"
 }
 ```
 
+No server-side filtering or pagination — max ~200 dramas, frontend handles filtering client-side.
+
 ### File Uploads
 
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| `POST` | `/api/upload/poster` | JWT | Upload poster image (multipart/form-data). Returns `{ path: "/uploads/posters/abc123.webp" }` |
-| `DELETE` | `/api/upload/poster/:filename` | JWT | Delete a poster file from the server |
+| `POST` | `/api/upload/poster` | Bearer | Upload poster image (multipart/form-data). Returns `{ poster_path }` |
 
-**Upload constraints:**
+**Upload behavior:**
 
 - Allowed types: JPEG, PNG, WebP
-- Max file size: 5 MB
+- Image integrity verified via Pillow
 - Auto-resize: max width 800px, preserves aspect ratio
 - Filename: UUID-based to avoid collisions
-
-### Media (future-proof)
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/api/media` | — | Generic media listing. Query param `?type=drama` filters by media type. Returns same structure as `/api/dramas` but extensible for future types (anime, movies, books) |
-
-This endpoint is a thin wrapper — for now it proxies to the dramas query, but the route exists so the frontend `/media` page has a stable contract.
+- Static files served at `/uploads/posters/...`
