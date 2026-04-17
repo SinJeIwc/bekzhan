@@ -8,7 +8,8 @@ app = FastAPI(
     version="1.0.0",
 )
 
-app.include_router(dramas.router, prefix="/api")
+app.include_router(dramas.public_router, prefix="/api")
+app.include_router(dramas.protected_router, prefix="/api")
 app.include_router(owner.router, prefix="/api")
 
 
