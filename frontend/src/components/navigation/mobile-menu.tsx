@@ -16,11 +16,9 @@ import Link from "next/link";
 export function MobileMenu() {
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <MenuIcon className="w-6 h-6" />
-          <span className="sr-only">Open menu</span>
-        </Button>
+      <SheetTrigger render={<Button variant="ghost" size="icon" />}>
+        <MenuIcon className="w-6 h-6" />
+        <span className="sr-only">Open menu</span>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
@@ -43,14 +41,17 @@ export function MobileMenu() {
         </SheetHeader>
         <nav className="flex flex-col">
           {navigation.map((item) => (
-            <SheetClose asChild key={item.title}>
-              <Link
-                href={item.url}
-                className="flex items-center gap-2 px-4 py-6 text-lg font-medium rounded-md hover:bg-chart-2/10 focus:outline-none focus:ring-1 focus:ring-chart-2"
-              >
-                <item.icon className="w-5 h-5" />
-                {item.title}
-              </Link>
+            <SheetClose
+              key={item.title}
+              render={
+                <Link
+                  href={item.url}
+                  className="flex items-center gap-2 px-4 py-6 text-lg font-medium rounded-md hover:bg-chart-2/10 focus:outline-none focus:ring-1 focus:ring-chart-2"
+                />
+              }
+            >
+              <item.icon className="w-5 h-5" />
+              {item.title}
             </SheetClose>
           ))}
         </nav>

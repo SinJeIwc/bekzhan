@@ -7,7 +7,7 @@ export function Kyrgyzstan() {
 			<PopoverTrigger className="underline text-chart-2">
 				Kyrgyzstan
 			</PopoverTrigger>
-			<PopoverContent asChild className="p-0" side="top">
+			<PopoverContent className="p-0" side="top">
 				<Image src="/kg.jpg" alt="Kyrgyzstan" width={200} height={200} />
 			</PopoverContent>
 		</Popover>
