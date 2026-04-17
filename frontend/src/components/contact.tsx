@@ -19,7 +19,7 @@ export function Contact() {
             href={contact.url}
             className="p-2 transition-transform border rounded-md hover:bg-accent/50 hover:border-chart-2 hover:scale-105 focus-visible:border-chart-2 focus:outline-none focus-visible:scale-105"
           >
-            <contact.icon className="w-8 h-8" />
+            <contact.icon />
           </Link>
         ))}
       </section>
