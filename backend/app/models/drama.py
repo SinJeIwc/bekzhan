@@ -67,7 +67,11 @@ class Drama(DramaBase, table=True):
     )
     updated_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
-        sa_column=Column(DateTime(timezone=True), nullable=False),
+        sa_column=Column(
+            DateTime(timezone=True),
+            nullable=False,
+            onupdate=lambda: datetime.now(UTC),
+        ),
     )
 
 
