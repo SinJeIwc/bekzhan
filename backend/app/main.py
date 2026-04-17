@@ -1,8 +1,14 @@
 from fastapi import FastAPI
 
+from app.routers import dramas
+
 app = FastAPI(
-    title="Bekzhan's API", description="API for Bekzhan's project", version="1.0.0"
+    title="Bekzhan's API",
+    description="API for Bekzhan's project",
+    version="1.0.0",
 )
+
+app.include_router(dramas.router, prefix="/api")
 
 
 @app.get("/health", tags=["Health"])
