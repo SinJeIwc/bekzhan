@@ -9,7 +9,7 @@ from app.utils.token import decode_access_token
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/owner/login")
 
 
-def get_current_owner(token: Annotated[str, Depends(oauth2_scheme)]) -> str | int:
+def get_current_owner(token: Annotated[str, Depends(oauth2_scheme)]) -> str:
     try:
         payload = decode_access_token(token)
     except ExpiredSignatureError:
@@ -27,7 +27,7 @@ def get_current_owner(token: Annotated[str, Depends(oauth2_scheme)]) -> str | in
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token payload"
         )
-    return sub
+    return str(sub)
 
 
-CurrentOwnerDep = Annotated[str | int, Depends(get_current_owner)]
+CurrentOwnerDep = Annotated[str, Depends(get_current_owner)]

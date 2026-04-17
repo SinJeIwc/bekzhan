@@ -1,6 +1,5 @@
 import uuid
 from collections.abc import Sequence
-from webbrowser import get
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import select
@@ -10,7 +9,7 @@ from app.dependencies.session import SessionDep
 from app.models.drama import Drama, DramaCreate, DramaPublic
 
 public_router = APIRouter(prefix="/dramas", tags=["dramas"])
-protected_roter = APIRouter(
+protected_router = APIRouter(
     prefix="/dramas",
     tags=["dramas"],
     dependencies=[Depends(get_current_owner)],
@@ -33,7 +32,7 @@ def get_drama(drama_id: uuid.UUID, session: SessionDep) -> Drama:
     return drama
 
 
-@protected_roter.post(
+@protected_router.post(
     "/", response_model=DramaPublic, status_code=status.HTTP_201_CREATED
 )
 def create_drama(data: DramaCreate, session: SessionDep) -> Drama:
@@ -44,7 +43,7 @@ def create_drama(data: DramaCreate, session: SessionDep) -> Drama:
     return drama
 
 
-@protected_roter.put("/{drama_id}", response_model=DramaPublic)
+@protected_router.put("/{drama_id}", response_model=DramaPublic)
 def update_drama(
     drama_id: uuid.UUID,
     data: DramaCreate,
@@ -64,7 +63,7 @@ def update_drama(
     return drama
 
 
-@protected_roter.delete("/{drama_id}", status_code=status.HTTP_204_NO_CONTENT)
+@protected_router.delete("/{drama_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_drama(drama_id: uuid.UUID, session: SessionDep) -> None:
     drama = session.get(Drama, drama_id)
     if drama is None:
