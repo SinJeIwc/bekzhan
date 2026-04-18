@@ -26,6 +26,7 @@ export function Hero() {
 
       <div className="mt-4 flex gap-4">
         <Button
+          nativeButton={false}
           className="focus-visible:ring-chart-2"
           // biome-ignore lint/a11y/useAnchorContent: children injected by Base UI render prop
           render={<a href="#about" />}
@@ -33,6 +34,7 @@ export function Hero() {
           Learn More
         </Button>
         <Button
+          nativeButton={false}
           variant="outline"
           className="focus-visible:ring-chart-2"
           // biome-ignore lint/a11y/useAnchorContent: children injected by Base UI render prop
