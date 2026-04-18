@@ -8,10 +8,10 @@ import { skillList } from "@constants/skill-list";
 import Image from "next/image";
 import {
 	Accordion,
-	AccordionContent,
 	AccordionItem,
+	AccordionPanel,
 	AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/components/animate-ui/components/base/accordion";
 import { Separator } from "./ui/separator";
 
 export function Skills() {
@@ -43,23 +43,21 @@ export function Skills() {
 								className="select-none rounded-md border bg-card p-2 shadow-md transition-transform hover:scale-105 hover:border-chart-2"
 							/>
 						</HoverCardTrigger>
-						<HoverCardContent>
-							<div className="flex justify-between gap-4">
-								<Avatar>
-									<AvatarImage src={skill.icon} />
-									<AvatarFallback>{skill.name}</AvatarFallback>
-								</Avatar>
-								<div className="space-y-1">
-									<a
-										href={skill.url}
-										target="_blank"
-										rel="noreferrer"
-										className="font-semibold text-sm hover:underline"
-									>
-										{skill.name}
-									</a>
-									<p className="text-sm">{skill.description}</p>
-								</div>
+						<HoverCardContent className="flex justify-between gap-4">
+							<Avatar className="">
+								<AvatarImage src={skill.icon} />
+								<AvatarFallback>{skill.name}</AvatarFallback>
+							</Avatar>
+							<div className="space-y-1">
+								<a
+									href={skill.url}
+									target="_blank"
+									rel="noreferrer"
+									className="font-semibold text-sm hover:underline"
+								>
+									{skill.name}
+								</a>
+								<p className="text-sm">{skill.description}</p>
 							</div>
 						</HoverCardContent>
 					</HoverCard>
@@ -73,7 +71,7 @@ export function Skills() {
 					<AccordionTrigger className="font-bold text-xl focus-visible:border-0 focus-visible:text-chart-2 focus-visible:ring-0">
 						More Skills
 					</AccordionTrigger>
-					<AccordionContent className="flex flex-col gap-4">
+					<AccordionPanel className="flex flex-col gap-4">
 						<h3 className="text-xl md:text-2xl">Programming Languages</h3>
 						<p>JavaScript, TypeScript, Python</p>
 						<h3 className="text-xl md:text-2xl">Technologies</h3>
@@ -83,7 +81,7 @@ export function Skills() {
 							English (B2), Agile Methodologies, Problem-Solving, Team
 							Collaboration
 						</p>
-					</AccordionContent>
+					</AccordionPanel>
 				</AccordionItem>
 			</Accordion>
 		</article>
