@@ -1,20 +1,20 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { useAuth } from "@lib/auth";
+import { Button } from "@ui/button";
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { useAuth } from "@/lib/auth";
+} from "@ui/card";
+import { Input } from "@ui/input";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const loginSchema = z.object({
 	username: z.string().min(1, "Username is required"),
@@ -23,7 +23,7 @@ const loginSchema = z.object({
 
 type LoginForm = z.infer<typeof loginSchema>;
 
-export default function LoginPage() {
+export default function Login() {
 	const router = useRouter();
 	const { login } = useAuth();
 	const [error, setError] = useState<string | null>(null);
@@ -49,8 +49,10 @@ export default function LoginPage() {
 	return (
 		<Card className="w-full max-w-sm">
 			<CardHeader>
-				<CardTitle>Login</CardTitle>
-				<CardDescription>Sign in to manage dramas</CardDescription>
+				<CardTitle>You neet to Login</CardTitle>
+				<CardDescription>
+					I'm not sure you're the real owner of this site
+				</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
