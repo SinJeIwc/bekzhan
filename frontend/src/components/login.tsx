@@ -40,7 +40,7 @@ export default function Login() {
 		setError(null);
 		try {
 			await login(data.username, data.password);
-			router.back();
+			router.push("/d");
 		} catch {
 			setError("Invalid username or password");
 		}
