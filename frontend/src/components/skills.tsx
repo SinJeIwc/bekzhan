@@ -18,9 +18,9 @@ export function Skills() {
   return (
     <article
       id="skills"
-      className="container flex flex-col justify-center min-h-screen gap-8 mx-auto py-25 snap-start"
+      className="container mx-auto flex min-h-screen snap-start flex-col justify-center gap-8 py-25"
     >
-      <h2 className="mt-8 text-3xl text-center md:text-4xl">Skills</h2>
+      <h2 className="mt-8 text-center text-3xl md:text-4xl">Skills</h2>
       <section className="flex flex-wrap items-center justify-center gap-4">
         {skillList.map((skill) => (
           <HoverCard key={skill.name}>
@@ -29,14 +29,14 @@ export function Skills() {
                 href={skill.url}
                 target="_blank"
                 rel="noreferrer"
-                className="focus-visible:outline-none focus-visible:bg-chart-2"
+                className="focus-visible:bg-chart-2 focus-visible:outline-none"
               >
                 <Image
                   src={skill.icon}
                   alt={skill.name}
                   width={64}
                   height={64}
-                  className="p-2 transition-transform border rounded-md shadow-md select-none bg-card hover:scale-105 hover:border-chart-2"
+                  className="select-none rounded-md border bg-card p-2 shadow-md transition-transform hover:scale-105 hover:border-chart-2"
                 />
               </a>
             </HoverCardTrigger>
@@ -51,7 +51,7 @@ export function Skills() {
                     href={skill.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm font-semibold hover:underline"
+                    className="font-semibold text-sm hover:underline"
                   >
                     {skill.name}
                   </a>
@@ -67,7 +67,7 @@ export function Skills() {
 
       <Accordion>
         <AccordionItem value="more-skills">
-          <AccordionTrigger className="text-xl font-bold focus-visible:border-0 focus-visible:ring-0 focus-visible:text-chart-2">
+          <AccordionTrigger className="font-bold text-xl focus-visible:border-0 focus-visible:text-chart-2 focus-visible:ring-0">
             More Skills
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-4">

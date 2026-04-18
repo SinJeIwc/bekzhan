@@ -5,9 +5,9 @@ export function Contact() {
   return (
     <article
       id="contact"
-      className="container flex flex-col items-center justify-center min-h-screen gap-4 mx-auto md:gap-8 py-25 snap-start"
+      className="container mx-auto flex min-h-screen snap-start flex-col items-center justify-center gap-4 py-25 md:gap-8"
     >
-      <h2 className="text-3xl text-center md:text-4xl">Contact</h2>
+      <h2 className="text-center text-3xl md:text-4xl">Contact</h2>
       <p>
         Let's build something amazing together. Feel free to reach out for
         collaborations or just a friendly chat!
@@ -17,7 +17,7 @@ export function Contact() {
           <Link
             key={contact.url}
             href={contact.url}
-            className="p-2 transition-transform border rounded-md hover:bg-accent/50 hover:border-chart-2 hover:scale-105 focus-visible:border-chart-2 focus:outline-none focus-visible:scale-105"
+            className="rounded-md border p-2 transition-transform hover:scale-105 hover:border-chart-2 hover:bg-accent/50 focus:outline-none focus-visible:scale-105 focus-visible:border-chart-2"
           >
             <contact.icon />
           </Link>

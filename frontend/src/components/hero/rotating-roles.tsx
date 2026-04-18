@@ -41,8 +41,8 @@ export function RotatingRoles() {
   }, [displayedText, isDeleting, roleIndex]);
 
   return (
-    <div className="h-16 flex items-center">
-      <p className="text-xl md:text-2xl text-muted-foreground font-mono">
+    <div className="flex h-16 items-center">
+      <p className="font-mono text-muted-foreground text-xl md:text-2xl">
         {displayedText}
         <span className="animate-pulse">|</span>
       </p>

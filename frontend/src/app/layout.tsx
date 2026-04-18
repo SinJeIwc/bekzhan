@@ -4,44 +4,47 @@ import "./globals.css";
 import { Header } from "@components/header";
 import { StatusButton } from "@components/status-button";
 import { ThemeProvider } from "@components/theme-provider";
+import { AuthProvider } from "@lib/auth";
 
 const ibmPlexSans = IBM_Plex_Sans({
-	variable: "--font-ibm-plex-sans",
-	subsets: ["latin"],
+  variable: "--font-ibm-plex-sans",
+  subsets: ["latin"],
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
-	variable: "--font-ibm-plex-mono",
-	subsets: ["latin"],
-	weight: ["400", "700"],
+  variable: "--font-ibm-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
-	title: "Bekzhan Arstanaliev",
-	description: "Software Engineer",
+  title: "Bekzhan Arstanaliev",
+  description: "Software Engineer",
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang="en" suppressHydrationWarning>
-			<body
-				className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} antialiased `}
-			>
-				<ThemeProvider
-					attribute="class"
-					defaultTheme="system"
-					enableSystem
-					disableTransitionOnChange
-				>
-					<Header />
-					{children}
-					<StatusButton />
-				</ThemeProvider>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} antialiased`}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <Header />
+            {children}
+            <StatusButton />
+          </AuthProvider>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
 }

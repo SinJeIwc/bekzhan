@@ -29,7 +29,7 @@ export function DesktopMenu() {
   return (
     <nav
       aria-label="Primary"
-      className="relative items-center hidden p-2 border rounded-full md:flex border-chart-2/80"
+      className="relative hidden items-center rounded-full border border-chart-2/80 p-2 md:flex"
       onMouseLeave={() => setHoveredIndex(null)}
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
@@ -41,7 +41,7 @@ export function DesktopMenu() {
         <Link
           key={item.url}
           href={item.url}
-          className="text-base relative z-10 px-3 py-1.5 transition-colors focus-visible:outline-none cursor-pointer"
+          className="relative z-10 cursor-pointer px-3 py-1.5 text-base transition-colors focus-visible:outline-none"
           onMouseEnter={() => setHoveredIndex(index)}
           onFocus={() => setHoveredIndex(index)}
           onClick={() => handleClick(index)}

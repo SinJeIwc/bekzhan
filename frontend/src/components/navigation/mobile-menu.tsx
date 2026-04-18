@@ -17,7 +17,7 @@ export function MobileMenu() {
   return (
     <Sheet>
       <SheetTrigger render={<Button variant="ghost" size="icon" />}>
-        <MenuIcon className="w-6 h-6" />
+        <MenuIcon className="h-6 w-6" />
         <span className="sr-only">Open menu</span>
       </SheetTrigger>
       <SheetContent>
@@ -46,17 +46,17 @@ export function MobileMenu() {
               render={
                 <Link
                   href={item.url}
-                  className="flex items-center gap-2 px-4 py-6 text-lg font-medium rounded-md hover:bg-chart-2/10 focus:outline-none focus:ring-1 focus:ring-chart-2"
+                  className="flex items-center gap-2 rounded-md px-4 py-6 font-medium text-lg hover:bg-chart-2/10 focus:outline-none focus:ring-1 focus:ring-chart-2"
                 />
               }
             >
-              <item.icon className="w-5 h-5" />
+              <item.icon className="h-5 w-5" />
               {item.title}
             </SheetClose>
           ))}
         </nav>
         <SheetFooter>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             Something might appear here someday, probably...
           </p>
         </SheetFooter>

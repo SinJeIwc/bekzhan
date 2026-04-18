@@ -80,7 +80,7 @@ const AtSignIcon = forwardRef<AtSignIconHandle, AtSignIconProps>(
           controls.start("animate");
         }
       },
-      [controls, onMouseEnter]
+      [controls, onMouseEnter],
     );
 
     const handleMouseLeave = useCallback(
@@ -91,7 +91,7 @@ const AtSignIcon = forwardRef<AtSignIconHandle, AtSignIconProps>(
           controls.start("normal");
         }
       },
-      [controls, onMouseLeave]
+      [controls, onMouseLeave],
     );
 
     return (
@@ -127,7 +127,7 @@ const AtSignIcon = forwardRef<AtSignIconHandle, AtSignIconProps>(
         </svg>
       </div>
     );
-  }
+  },
 );
 
 AtSignIcon.displayName = "AtSignIcon";

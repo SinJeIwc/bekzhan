@@ -5,7 +5,7 @@ import { Skills } from "@components/skills";
 
 export default function Home() {
   return (
-    <main className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth w-[calc(100%-2rem)] mx-auto no-scrollbar">
+    <main className="no-scrollbar mx-auto h-screen w-[calc(100%-2rem)] snap-y snap-mandatory overflow-y-scroll scroll-smooth">
       <Hero />
       <About />
       <Skills />
