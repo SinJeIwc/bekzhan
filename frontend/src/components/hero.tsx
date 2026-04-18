@@ -27,6 +27,7 @@ export function Hero() {
       <div className="mt-4 flex gap-4">
         <Button
           className="focus-visible:ring-chart-2"
+          // biome-ignore lint/a11y/useAnchorContent: children injected by Base UI render prop
           render={<a href="#about" />}
         >
           Learn More
@@ -34,6 +35,7 @@ export function Hero() {
         <Button
           variant="outline"
           className="focus-visible:ring-chart-2"
+          // biome-ignore lint/a11y/useAnchorContent: children injected by Base UI render prop
           render={<a href="#projects" />}
         >
           Get in Touch
