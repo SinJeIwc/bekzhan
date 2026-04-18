@@ -42,6 +42,7 @@ export function MobileMenu() {
         <nav className="flex flex-col">
           {navigation.map((item) => (
             <SheetClose
+              nativeButton={false}
               key={item.title}
               render={
                 <Link
