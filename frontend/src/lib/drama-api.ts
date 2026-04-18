@@ -34,6 +34,21 @@ export function updateDrama(
 		.json<DramaPublic>();
 }
 
+export function uploadPoster(
+	file: File,
+	token: string,
+): Promise<{ poster_path: string }> {
+	const formData = new FormData();
+	formData.append("file", file);
+
+	return api
+		.post("upload/poster", {
+			body: formData,
+			headers: { Authorization: `Bearer ${token}` },
+		})
+		.json<{ poster_path: string }>();
+}
+
 export async function deleteDrama(id: string, token: string): Promise<void> {
 	await api.delete(`dramas/${id}`, {
 		headers: { Authorization: `Bearer ${token}` },
