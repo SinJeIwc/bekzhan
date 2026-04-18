@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import { useTheme } from 'next-themes';
-import { Monitor, Moon, Sun } from 'lucide-react';
+import { MoonIcon } from '@/components/ui/moon';
+import { SunIcon } from '@/components/ui/sun';
 import { VariantProps } from 'class-variance-authority';
 
 import {
@@ -13,21 +14,6 @@ import {
 } from '@/components/animate-ui/primitives/effects/theme-toggler';
 import { buttonVariants } from '@/components/animate-ui/components/buttons/icon';
 import { cn } from '@/lib/utils';
-
-const getIcon = (
-  effective: ThemeSelection,
-  resolved: Resolved,
-  modes: ThemeSelection[],
-) => {
-  const theme = modes.includes('system') ? effective : resolved;
-  return theme === 'system' ? (
-    <Monitor />
-  ) : theme === 'dark' ? (
-    <Moon />
-  ) : (
-    <Sun />
-  );
-};
 
 const getNextTheme = (
   effective: ThemeSelection,
@@ -65,17 +51,25 @@ function ThemeTogglerButton({
       direction={direction}
       onImmediateChange={onImmediateChange}
     >
-      {({ effective, resolved, toggleTheme }) => (
+      {({ effective, toggleTheme }) => (
         <button
           data-slot="theme-toggler-button"
-          className={cn(buttonVariants({ variant, size, className }))}
+          className={cn(buttonVariants({ variant, size, className }), 'relative')}
           onClick={(e) => {
             onClick?.(e);
             toggleTheme(getNextTheme(effective, modes));
           }}
           {...props}
         >
-          {getIcon(effective, resolved, modes)}
+          <SunIcon
+            size={20}
+            className="scale-100 rotate-0 transition-transform duration-300 dark:scale-0 dark:-rotate-90"
+          />
+          <MoonIcon
+            size={20}
+            className="absolute scale-0 rotate-90 transition-transform duration-300 dark:scale-100 dark:rotate-0"
+          />
+          <span className="sr-only">Toggle theme</span>
         </button>
       )}
     </ThemeTogglerPrimitive>
