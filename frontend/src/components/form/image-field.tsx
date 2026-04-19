@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { BASE_URL } from "@/lib/api";
+import { isValidPoster, posterUrl } from "@/lib/poster";
 
 const ACCEPTED_EXTENSIONS = ".jpg,.jpeg,.png,.webp";
 const ACCEPTED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
@@ -17,9 +17,10 @@ interface ImageFieldProps {
 	/** Called with File when user selects, null when removed */
 	onChange: (file: File | null) => void;
 	error?: string;
+	disabled?: boolean;
 }
 
-export function ImageField({ label, value, onChange, error }: ImageFieldProps) {
+export function ImageField({ label, value, onChange, error, disabled }: ImageFieldProps) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [preview, setPreview] = useState<string | null>(null);
 	const [validationError, setValidationError] = useState<string | null>(null);
@@ -59,7 +60,7 @@ export function ImageField({ label, value, onChange, error }: ImageFieldProps) {
 	};
 
 	const displayError = validationError ?? error;
-	const imageUrl = preview ?? (value ? `${BASE_URL}${value}` : null);
+	const imageUrl = preview ?? (isValidPoster(value) ? posterUrl(value) : null);
 
 	return (
 		<div className="space-y-2">
@@ -70,6 +71,7 @@ export function ImageField({ label, value, onChange, error }: ImageFieldProps) {
 				type="file"
 				accept={ACCEPTED_EXTENSIONS}
 				onChange={handleInputChange}
+				disabled={disabled}
 				className="hidden"
 			/>
 
@@ -88,6 +90,7 @@ export function ImageField({ label, value, onChange, error }: ImageFieldProps) {
 						variant="destructive"
 						size="icon-sm"
 						className="absolute -top-2 -right-2"
+						disabled={disabled}
 						onClick={handleRemove}
 					>
 						<Trash2Icon className="size-4" />
@@ -97,6 +100,7 @@ export function ImageField({ label, value, onChange, error }: ImageFieldProps) {
 				<Button
 					type="button"
 					variant="outline"
+					disabled={disabled}
 					onClick={() => inputRef.current?.click()}
 					className="flex h-48 w-full max-w-xs flex-col items-center justify-center gap-2 rounded-2xl border-dashed text-muted-foreground transition-colors hover:border-primary hover:text-primary"
 				>

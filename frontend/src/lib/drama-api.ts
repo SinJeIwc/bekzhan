@@ -5,8 +5,8 @@ export function getDramas(): Promise<DramaPublic[]> {
 	return api.get("dramas/").json<DramaPublic[]>();
 }
 
-export function getDrama(id: string): Promise<DramaPublic[]> {
-	return api.get(`dramas/${id}`).json<DramaPublic[]>();
+export function getDrama(id: string): Promise<DramaPublic> {
+	return api.get(`dramas/${id}`).json<DramaPublic>();
 }
 
 export function createDrama(

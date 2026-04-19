@@ -22,6 +22,7 @@ interface SingleSelectFieldProps {
 	placeholder?: string;
 	error?: string;
 	multiple?: false;
+	disabled?: boolean;
 }
 
 interface MultiSelectFieldProps {
@@ -32,6 +33,7 @@ interface MultiSelectFieldProps {
 	placeholder?: string;
 	error?: string;
 	multiple: true;
+	disabled?: boolean;
 }
 
 type SelectFieldProps = SingleSelectFieldProps | MultiSelectFieldProps;
@@ -49,6 +51,7 @@ export function SelectField(props: SelectFieldProps) {
 				onValueChange={(v) => {
 					if (v !== null) props.onChange(v);
 				}}
+				disabled={props.disabled}
 			>
 				<SelectTrigger className="w-full">
 					<SelectValue placeholder={props.placeholder} />
@@ -74,6 +77,7 @@ function MultiSelect({
 	value,
 	onChange,
 	error,
+	disabled,
 }: MultiSelectFieldProps) {
 	const toggle = (optionValue: string) => {
 		const next = value.includes(optionValue)
@@ -90,8 +94,9 @@ function MultiSelect({
 					<button
 						key={opt.value}
 						type="button"
+						disabled={disabled}
 						onClick={() => toggle(opt.value)}
-						className={`rounded-full border px-3 py-1 text-sm transition-colors ${
+						className={`rounded-full border px-3 py-1 text-sm transition-colors disabled:pointer-events-none disabled:opacity-50 ${
 							value.includes(opt.value)
 								? "border-primary bg-primary/20 text-primary"
 								: "border-border hover:border-primary/50"

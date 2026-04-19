@@ -23,6 +23,7 @@ interface DramaFormProps {
 	defaultValues?: Partial<DramaCreate>;
 	onSubmit: (data: DramaCreate) => Promise<void>;
 	submitLabel?: string;
+	disabled?: boolean;
 }
 
 const INITIAL_VALUES: Partial<DramaFormValues> = {
@@ -40,6 +41,7 @@ export function DramaForm({
 	defaultValues,
 	onSubmit,
 	submitLabel = "Create",
+	disabled,
 }: DramaFormProps) {
 	const { token } = useAuth();
 	const posterFileRef = useRef<File | null>(null);
@@ -55,6 +57,8 @@ export function DramaForm({
 		resolver: zodResolver(dramaSchema),
 		defaultValues: { ...INITIAL_VALUES, ...defaultValues },
 	});
+
+	const busy = disabled || isSubmitting;
 
 	const handleFormSubmit = async (data: DramaFormValues) => {
 		setPosterError(null);
@@ -85,12 +89,14 @@ export function DramaForm({
 					placeholder="Drama title"
 					register={register}
 					error={errors.title?.message}
+					disabled={busy}
 				/>
 				<TextField<DramaFormValues>
 					name="original_title"
 					label="Original Title"
 					placeholder="Original title in native language"
 					register={register}
+					disabled={busy}
 				/>
 			</div>
 
@@ -103,6 +109,7 @@ export function DramaForm({
 				rows={4}
 				register={register}
 				error={errors.description?.message}
+				disabled={busy}
 			/>
 			<TextField<DramaFormValues>
 				name="review"
@@ -111,6 +118,7 @@ export function DramaForm({
 				multiline
 				rows={3}
 				register={register}
+				disabled={busy}
 			/>
 
 			{/* Rating, Year, Episodes */}
@@ -123,6 +131,7 @@ export function DramaForm({
 					error={errors.rating?.message}
 					float
 					min={0}
+					disabled={busy}
 				/>
 				<NumberField<DramaFormValues>
 					name="year"
@@ -130,18 +139,21 @@ export function DramaForm({
 					placeholder="Release year"
 					register={register}
 					error={errors.year?.message}
+					disabled={busy}
 				/>
 				<NumberField<DramaFormValues>
 					name="episodes_aired"
 					label="Episodes Aired"
 					placeholder="Aired so far"
 					register={register}
+					disabled={busy}
 				/>
 				<NumberField<DramaFormValues>
 					name="episodes_total"
 					label="Episodes Total"
 					placeholder="Total episodes"
 					register={register}
+					disabled={busy}
 				/>
 			</div>
 
@@ -153,6 +165,7 @@ export function DramaForm({
 					options={toOptions(STATUSES)}
 					value={watch("status")}
 					onChange={(v) => setValue("status", v as DramaStatus)}
+					disabled={busy}
 				/>
 				<SelectField
 					label="Country"
@@ -160,6 +173,7 @@ export function DramaForm({
 					options={toOptions(COUNTRIES)}
 					value={watch("country")}
 					onChange={(v) => setValue("country", v as DramaCountry)}
+					disabled={busy}
 				/>
 			</div>
 
@@ -170,6 +184,7 @@ export function DramaForm({
 				value={watch("genres") ?? []}
 				onChange={(v) => setValue("genres", v)}
 				multiple
+				disabled={busy}
 			/>
 
 			{/* Poster */}
@@ -181,11 +196,12 @@ export function DramaForm({
 					if (!file) setValue("poster_path", null);
 				}}
 				error={posterError ?? undefined}
+				disabled={busy}
 			/>
 
 			<Button
 				type="submit"
-				disabled={isSubmitting}
+				disabled={busy}
 				className="w-full md:w-auto"
 			>
 				{isSubmitting ? "Saving..." : submitLabel}

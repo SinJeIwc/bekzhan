@@ -12,6 +12,7 @@ interface NumberFieldProps<T extends FieldValues> {
 	min?: number;
 	max?: number;
 	step?: number;
+	disabled?: boolean;
 }
 
 export function NumberField<T extends FieldValues>({
@@ -24,6 +25,7 @@ export function NumberField<T extends FieldValues>({
 	min,
 	max,
 	step,
+	disabled,
 }: NumberFieldProps<T>) {
 	const resolvedStep = step ?? (float ? 0.1 : 1);
 
@@ -34,6 +36,7 @@ export function NumberField<T extends FieldValues>({
 				id={name}
 				type="number"
 				placeholder={placeholder}
+				disabled={disabled}
 				step={resolvedStep}
 				min={min}
 				max={max}

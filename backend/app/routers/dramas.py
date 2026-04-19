@@ -7,6 +7,7 @@ from sqlmodel import select
 from app.dependencies.owner import get_current_owner
 from app.dependencies.session import SessionDep
 from app.models.drama import Drama, DramaCreate, DramaPublic
+from app.utils.image import delete_poster
 
 public_router = APIRouter(prefix="/dramas", tags=["dramas"])
 protected_router = APIRouter(
@@ -55,11 +56,23 @@ def update_drama(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Drama not found",
         )
+
+    old_poster = drama.poster_path
+    new_poster = data.poster_path
+
     for key, value in data.model_dump(exclude_unset=True).items():
         setattr(drama, key, value)
     session.add(drama)
     session.commit()
     session.refresh(drama)
+
+    # Clean up old poster if it was replaced
+    if old_poster and new_poster != old_poster:
+        try:
+            delete_poster(old_poster)
+        except (FileNotFoundError, OSError):
+            pass  # Old file already gone, not critical
+
     return drama
 
 
@@ -71,5 +84,12 @@ def delete_drama(drama_id: uuid.UUID, session: SessionDep) -> None:
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Drama not found",
         )
+
+    if drama.poster_path:
+        try:
+            delete_poster(drama.poster_path)
+        except (FileNotFoundError, OSError):
+            pass  # Poster missing or invalid path, proceed with deletion
+
     session.delete(drama)
     session.commit()

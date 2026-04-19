@@ -10,6 +10,22 @@ POSTERS_DIR = Path(settings.upload_dir) / "posters"
 MAX_WIDTH = 800
 
 
+def delete_poster(poster_path: str) -> None:
+    """Delete a poster file from the filesystem.
+
+    Args:
+        poster_path: The path stored in the database, e.g. "/uploads/posters/abc.jpg".
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+        OSError: If the file cannot be deleted.
+    """
+    # poster_path is "/uploads/posters/{filename}", strip leading "/uploads/"
+    relative = poster_path.lstrip("/").removeprefix("uploads/")
+    filepath = Path(settings.upload_dir) / relative
+    filepath.unlink()
+
+
 def save_poster(file_bytes: bytes, original_filename: str) -> str:
     POSTERS_DIR.mkdir(parents=True, exist_ok=True)
 

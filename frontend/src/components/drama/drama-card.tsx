@@ -1,25 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { STATUS_COLORS } from "@/constants/drama";
 import { SquarePenIcon } from "@/components/ui/square-pen";
-import { BASE_URL } from "@/lib/api";
+import { isValidPoster, posterUrl } from "@/lib/poster";
 import type { DramaPublic } from "@/types/drama";
-
-const statusColors: Record<string, string> = {
-	watching: "bg-chart-2/20 text-chart-2",
-	completed: "bg-green-500/20 text-green-600 dark:text-green-400",
-	dropped: "bg-destructive/20 text-destructive",
-	planned: "bg-muted text-muted-foreground",
-};
-
-function isValidPoster(path: string | null | undefined): path is string {
-	return !!path && (path.startsWith("/uploads") || path.startsWith("http"));
-}
-
-function posterUrl(path: string): string {
-	if (path.startsWith("http")) return path;
-	return `${BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
-}
 
 interface DramaCardProps {
 	drama: DramaPublic;
@@ -49,7 +34,7 @@ export function DramaCard({ drama, editable }: DramaCardProps) {
 				</Link>
 
 				<Badge
-					className={`absolute top-2 right-2 z-10 ${statusColors[drama.status] ?? ""}`}
+					className={`absolute top-2 right-2 z-10 ${STATUS_COLORS[drama.status] ?? ""}`}
 				>
 					{drama.status}
 				</Badge>

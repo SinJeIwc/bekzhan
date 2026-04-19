@@ -11,6 +11,7 @@ interface TextFieldProps<T extends FieldValues> {
 	error?: string;
 	multiline?: boolean;
 	rows?: number;
+	disabled?: boolean;
 }
 
 export function TextField<T extends FieldValues>({
@@ -21,6 +22,7 @@ export function TextField<T extends FieldValues>({
 	error,
 	multiline = false,
 	rows = 4,
+	disabled,
 }: TextFieldProps<T>) {
 	const Component = multiline ? Textarea : Input;
 
@@ -30,6 +32,7 @@ export function TextField<T extends FieldValues>({
 			<Component
 				id={name}
 				placeholder={placeholder}
+				disabled={disabled}
 				{...(multiline ? { rows } : { type: "text" })}
 				{...register(name)}
 			/>

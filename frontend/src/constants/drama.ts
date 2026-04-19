@@ -1,3 +1,10 @@
+export const STATUS_COLORS: Record<string, string> = {
+	watching: "bg-chart-2/20 text-chart-2",
+	completed: "bg-green-500/20 text-green-600 dark:text-green-400",
+	dropped: "bg-destructive/20 text-destructive",
+	planned: "bg-muted text-muted-foreground",
+};
+
 export const STATUSES = [
 	"watching",
 	"completed",
