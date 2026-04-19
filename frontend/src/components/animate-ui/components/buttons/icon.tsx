@@ -62,14 +62,24 @@ function IconButton({
   const [key, setKey] = React.useState(0);
 
   return (
-    <Particles animate={isActive} key={key} render={<ButtonPrimitive data-slot="icon-button" className={cn(buttonVariants({ variant, size, className }))} onClick={(e) => {
-                setKey((prev) => prev + 1);
-                setIsActive(true);
-                onClick?.(e);
-              }} {...props} />}>{children}<ParticlesEffect
-                data-variant={variant}
-                className="bg-neutral-500 size-1 rounded-full"
-              /></Particles>
+    <Particles animate={isActive} key={key} asChild>
+      <ButtonPrimitive
+        data-slot="icon-button"
+        className={cn(buttonVariants({ variant, size, className }))}
+        onClick={(e) => {
+          setKey((prev) => prev + 1);
+          setIsActive(true);
+          onClick?.(e);
+        }}
+        {...props}
+      >
+        {children}
+        <ParticlesEffect
+          data-variant={variant}
+          className="bg-neutral-500 size-1 rounded-full"
+        />
+      </ButtonPrimitive>
+    </Particles>
   );
 }
 
