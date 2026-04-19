@@ -9,6 +9,7 @@ services:
     name: bekzhan-api
     plan: free
     runtime: docker
+    rootDir: backend
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /health
