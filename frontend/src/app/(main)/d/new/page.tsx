@@ -1,33 +1,24 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { DramaForm } from "@/components/drama/drama-form";
 import { useAuth } from "@/lib/auth";
 import { createDrama } from "@/lib/drama-api";
 import type { DramaCreate } from "@/types/drama";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 export default function NewDramaPage() {
 	const router = useRouter();
-	const { isOwner, token } = useAuth();
+	const { isOwner, ready, token } = useAuth();
 
-	if (!isOwner) {
-		return (
-			<div className="container mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-24 text-center">
-				<h1 className="font-bold text-2xl">Access Denied</h1>
-				<p className="text-muted-foreground">
-					You need to be logged in as the owner to add dramas.
-				</p>
-				<Button nativeButton={false} render={<Link href="/login" />}>
-					Go to Login
-				</Button>
-			</div>
-		);
-	}
+	useEffect(() => {
+		if (ready && !isOwner) router.replace("/login");
+	}, [ready, isOwner, router]);
+
+	if (!ready || !isOwner || !token) return null;
 
 	const handleSubmit = async (data: DramaCreate) => {
-		await createDrama(data, token!);
+		await createDrama(data, token);
 		router.push("/d");
 	};
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LogoutButton } from "./logout-button";
 import { DesktopMenu } from "./navigation/desktop-menu";
 import { MobileMenu } from "./navigation/mobile-menu";
 import { ThemeButton } from "./theme-button";
@@ -20,6 +21,9 @@ export function Header() {
 			</div>
 
 			<div className="flex items-center gap-2">
+				<div className="hidden md:block">
+					<LogoutButton />
+				</div>
 				<ThemeButton />
 				<div className="md:hidden">
 					<MobileMenu />

@@ -10,7 +10,7 @@ export function StatusButton() {
 				<PopoverTrigger
 					render={
 						<Button
-							className="h-16 w-16 p-1 overflow-hidden rounded-full border-2 border-border bg-background shadow-lg hover:bg-accent hover:border-chart-2 focus:outline-none focus-visible:border-chart-2 focus-visible:ring-0"
+							className="h-16 w-16 overflow-hidden rounded-full border-2 border-border bg-background p-1 shadow-lg hover:border-chart-2 hover:bg-accent focus:outline-none focus-visible:border-chart-2 focus-visible:ring-0"
 							aria-label="Show status"
 						/>
 					}

@@ -1,6 +1,7 @@
 "use client";
 
 import { ImageIcon, Trash2Icon } from "lucide-react";
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -74,9 +75,12 @@ export function ImageField({ label, value, onChange, error }: ImageFieldProps) {
 
 			{imageUrl ? (
 				<div className="relative w-fit">
-					<img
+					<Image
 						src={imageUrl}
 						alt="Preview"
+						width={192}
+						height={192}
+						unoptimized
 						className="h-48 w-auto rounded-2xl border border-border object-cover"
 					/>
 					<Button
@@ -90,15 +94,16 @@ export function ImageField({ label, value, onChange, error }: ImageFieldProps) {
 					</Button>
 				</div>
 			) : (
-				<button
+				<Button
 					type="button"
+					variant="outline"
 					onClick={() => inputRef.current?.click()}
-					className="flex h-48 w-full max-w-xs flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+					className="flex h-48 w-full max-w-xs flex-col items-center justify-center gap-2 rounded-2xl border-dashed text-muted-foreground transition-colors hover:border-primary hover:text-primary"
 				>
 					<ImageIcon className="size-8" />
 					<span className="text-sm">Click to upload</span>
 					<span className="text-xs">JPG, PNG, WebP</span>
-				</button>
+				</Button>
 			)}
 
 			{displayError && (
