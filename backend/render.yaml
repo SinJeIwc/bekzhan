@@ -21,7 +21,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: CORS_ORIGINS
-        value: https://your-app.vercel.app
+        value: '["https://arstanaliev.vercel.app/"]'
       - key: UPLOAD_DIR
         value: /app/uploads
       - key: OWNER_USERNAME
