@@ -4,39 +4,39 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 interface TextFieldProps<T extends FieldValues> {
-	name: Path<T>;
-	label: string;
-	register: UseFormRegister<T>;
-	placeholder?: string;
-	error?: string;
-	multiline?: boolean;
-	rows?: number;
-	disabled?: boolean;
+  name: Path<T>;
+  label: string;
+  register: UseFormRegister<T>;
+  placeholder?: string;
+  error?: string;
+  multiline?: boolean;
+  rows?: number;
+  disabled?: boolean;
 }
 
 export function TextField<T extends FieldValues>({
-	name,
-	label,
-	register,
-	placeholder,
-	error,
-	multiline = false,
-	rows = 4,
-	disabled,
+  name,
+  label,
+  register,
+  placeholder,
+  error,
+  multiline = false,
+  rows = 4,
+  disabled,
 }: TextFieldProps<T>) {
-	const Component = multiline ? Textarea : Input;
+  const Component = multiline ? Textarea : Input;
 
-	return (
-		<div className="space-y-2">
-			<Label htmlFor={name}>{label}</Label>
-			<Component
-				id={name}
-				placeholder={placeholder}
-				disabled={disabled}
-				{...(multiline ? { rows } : { type: "text" })}
-				{...register(name)}
-			/>
-			{error && <p className="text-destructive text-sm">{error}</p>}
-		</div>
-	);
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={name}>{label}</Label>
+      <Component
+        id={name}
+        placeholder={placeholder}
+        disabled={disabled}
+        {...(multiline ? { rows } : { type: "text" })}
+        {...register(name)}
+      />
+      {error && <p className="text-destructive text-sm">{error}</p>}
+    </div>
+  );
 }

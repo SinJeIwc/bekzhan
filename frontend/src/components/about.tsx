@@ -1,6 +1,6 @@
 import { MoveRight } from "lucide-react";
-import { Separator } from "./ui/separator";
 import { Kyrgyzstan } from "./about/kyrgyzstan";
+import { Separator } from "./ui/separator";
 
 export function About() {
   return (
