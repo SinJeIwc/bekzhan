@@ -26,9 +26,11 @@ app.include_router(dramas.protected_router, prefix="/api")
 app.include_router(owner.router, prefix="/api")
 app.include_router(upload.router, prefix="/api")
 
-uploads_path = Path(settings.upload_dir)
-uploads_path.mkdir(exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=uploads_path), name="uploads")
+# Mount local uploads only if Cloudinary is not configured (local dev)
+if not settings.cloudinary_cloud_name:
+    uploads_path = Path(settings.upload_dir)
+    uploads_path.mkdir(exist_ok=True)
+    app.mount("/uploads", StaticFiles(directory=uploads_path), name="uploads")
 
 
 @app.get("/health", tags=["Health"])

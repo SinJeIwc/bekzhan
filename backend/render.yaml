@@ -24,6 +24,12 @@ services:
         value: '["https://arstanaliev.vercel.app/"]'
       - key: UPLOAD_DIR
         value: /app/uploads
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
       - key: OWNER_USERNAME
         sync: false
       - key: OWNER_PASSWORD_HASH

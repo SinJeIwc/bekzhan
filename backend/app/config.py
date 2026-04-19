@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expiration_hours: int = 24
     upload_dir: str = "uploads"
+    cloudinary_cloud_name: str = ""
+    cloudinary_api_key: str = ""
+    cloudinary_api_secret: str = ""
     owner_username: str = "admin"
     owner_password_hash: str = ""
 
