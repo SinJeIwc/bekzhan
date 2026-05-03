@@ -6,20 +6,20 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 
 export function LogoutButton() {
-	const { isOwner, logout } = useAuth();
+  const { isOwner, logout } = useAuth();
 
-	if (!isOwner) return null;
+  if (!isOwner) return null;
 
-	return (
-		<AnimateIcon animateOnHover asChild>
-			<Button
-				variant="ghost"
-				size="icon-lg"
-				onClick={logout}
-				aria-label="Logout"
-			>
-				<LogOut size={20} />
-			</Button>
-		</AnimateIcon>
-	);
+  return (
+    <AnimateIcon animateOnHover asChild>
+      <Button
+        variant="ghost"
+        size="icon-lg"
+        onClick={logout}
+        aria-label="Logout"
+      >
+        <LogOut size={20} />
+      </Button>
+    </AnimateIcon>
+  );
 }

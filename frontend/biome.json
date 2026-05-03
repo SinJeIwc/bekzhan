@@ -30,7 +30,10 @@
         "noUnknownAtRules": "off"
       },
       "nursery": {
-        "useSortedClasses": "error"
+        "useSortedClasses": {
+          "level": "error",
+          "fix": "safe"
+        }
       }
     },
     "domains": {

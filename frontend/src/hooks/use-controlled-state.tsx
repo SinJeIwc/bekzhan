@@ -5,7 +5,8 @@ interface CommonControlledStateProps<T> {
   defaultValue?: T;
 }
 
-export function useControlledState<T, Rest extends unknown[] = []>(
+// biome-ignore lint/suspicious/noExplicitAny: <from liberty>
+export function useControlledState<T, Rest extends any[] = []>(
   props: CommonControlledStateProps<T> & {
     onChange?: (value: T, ...args: Rest) => void;
   },

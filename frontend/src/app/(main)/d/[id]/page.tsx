@@ -8,23 +8,23 @@ import { useDrama } from "@/hooks/use-drama";
 import { useAuth } from "@/lib/auth";
 
 export default function DramaPage({
-	params,
+  params,
 }: {
-	params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>;
 }) {
-	const { id } = use(params);
-	const { drama, loading, error } = useDrama(id);
-	const { isOwner } = useAuth();
+  const { id } = use(params);
+  const { drama, loading, error } = useDrama(id);
+  const { isOwner } = useAuth();
 
-	return (
-		<div className="container mx-auto max-w-4xl px-4 py-24">
-			<DramaBackButton href="/d" label="Back to list" />
+  return (
+    <div className="container mx-auto max-w-4xl px-4 py-24">
+      <DramaBackButton href="/d" label="Back to list" />
 
-			{loading && <DramaDetailSkeleton />}
+      {loading && <DramaDetailSkeleton />}
 
-			{error && <p className="py-12 text-center text-destructive">{error}</p>}
+      {error && <p className="py-12 text-center text-destructive">{error}</p>}
 
-			{drama && <DramaDetail drama={drama} editable={isOwner} />}
-		</div>
-	);
+      {drama && <DramaDetail drama={drama} editable={isOwner} />}
+    </div>
+  );
 }
