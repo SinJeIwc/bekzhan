@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { RotatingRoles } from "./hero/rotating-roles";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import { FileTextIcon } from "./ui/file-text";
 
 export function Hero() {
 	return (
@@ -25,14 +27,15 @@ export function Hero() {
 			</section>
 
 			<div className="mt-4 flex gap-4">
-				<Button
-					nativeButton={false}
-					className="focus-visible:ring-chart-2"
-					// biome-ignore lint/a11y/useAnchorContent: children injected by Base UI render prop
-					render={<a href="#about" />}
+				<Link
+					href="https://docs.google.com/document/d/1m9ds9CU6ErHa1MvcanE1eJGusjdiUT2biYW-Ok6hNvs/edit?usp=sharing"
+					target="_blank"
+					rel="noopener noreferrer"
+					className="inline-flex h-9 items-center justify-center gap-1.5 rounded-4xl border border-border bg-background px-3 text-sm font-medium whitespace-nowrap transition-all hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-chart-2 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
 				>
-					Learn More
-				</Button>
+					<FileTextIcon />
+					Resume
+				</Link>
 				<Button
 					nativeButton={false}
 					variant="outline"
